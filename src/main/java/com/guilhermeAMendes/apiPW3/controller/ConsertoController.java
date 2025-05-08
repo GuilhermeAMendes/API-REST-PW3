@@ -48,10 +48,16 @@ public class ConsertoController {
         if (consertoOptional.isPresent()) {
             Conserto conserto = consertoOptional.get();
             return ResponseEntity.ok(new DadosDetalhadosConserto(conserto));
-        }
-        else {
+        } else {
             return ResponseEntity.notFound().build();
         }
     }
 
+    @PutMapping
+    @Transactional
+    public ResponseEntity atualizar(@RequestBody DadosAtualizacao dados) {
+        Conserto conserto = repostory.getReferenceById(dados.id());
+        conserto.atualizaDados(dados);
+        return ResponseEntity.ok(new DadosDetalhadosConserto(conserto));
+    }
 }
