@@ -1,0 +1,2 @@
+alter table consertos
+    add cor varchar(100);
