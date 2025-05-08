@@ -2,6 +2,7 @@ package com.guilhermeAMendes.apiPW3.controller;
 
 import com.guilhermeAMendes.apiPW3.conserto.*;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,9 +24,11 @@ public class ConsertoController {
 
     @PostMapping
     @Transactional
-    public void cadastrar(@RequestBody DadosCadastroConserto dados) {
+    public ResponseEntity<DadosDetalhadosConserto> cadastrar(@RequestBody @Valid DadosCadastroConserto dados, UriComponentsBuilder uriBuilder  ) {
         Conserto conserto = new Conserto(dados);
         repostory.save(conserto);
+        var uri = uriBuilder.path("/consertos/{id}").buildAndExpand(conserto.getId()).toUri();
+        return ResponseEntity.created(uri).body(new DadosDetalhadosConserto(conserto));
     }
 
     @GetMapping
