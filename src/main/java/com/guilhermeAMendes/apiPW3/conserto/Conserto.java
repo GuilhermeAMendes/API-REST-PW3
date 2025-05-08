@@ -40,4 +40,8 @@ public class Conserto {
             mecanico.atualizaDados(dados.mecanico());
     }
 
+    public void excluir(){
+        this.ativo = false;
+    }
+
 }

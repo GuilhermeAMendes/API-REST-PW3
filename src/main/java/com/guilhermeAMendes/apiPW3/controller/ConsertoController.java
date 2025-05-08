@@ -60,4 +60,12 @@ public class ConsertoController {
         conserto.atualizaDados(dados);
         return ResponseEntity.ok(new DadosDetalhadosConserto(conserto));
     }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public  ResponseEntity excluir(@PathVariable Long id) {
+        Conserto conserto = repostory.getReferenceById(id);
+        conserto.excluir();
+        return ResponseEntity.noContent().build();
+    }
 }
