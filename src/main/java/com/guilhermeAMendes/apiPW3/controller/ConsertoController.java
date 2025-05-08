@@ -3,12 +3,12 @@ package com.guilhermeAMendes.apiPW3.controller;
 import com.guilhermeAMendes.apiPW3.conserto.Conserto;
 import com.guilhermeAMendes.apiPW3.conserto.ConsertoRepostory;
 import com.guilhermeAMendes.apiPW3.conserto.DadosCadastroConserto;
+import com.guilhermeAMendes.apiPW3.conserto.DadosListagemConserto;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("consertos")
@@ -22,5 +22,15 @@ public class ConsertoController {
     public void cadastrar(@RequestBody DadosCadastroConserto dados) {
         Conserto conserto = new Conserto(dados);
         repostory.save(conserto);
+    }
+
+    @GetMapping
+    public List<Conserto> listarTodosOsConsertos() {
+        return repostory.findAll();
+    }
+
+    @GetMapping("algunsdados")
+    public List<DadosListagemConserto> listarAlgunsDados() {
+        return repostory.findAll().stream().map(DadosListagemConserto::new).toList();
     }
 }
