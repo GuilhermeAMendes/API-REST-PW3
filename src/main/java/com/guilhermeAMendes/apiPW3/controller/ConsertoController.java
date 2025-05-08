@@ -28,18 +28,18 @@ public class ConsertoController {
     }
 
     @GetMapping
-    public Page<DadosDetalhadosConserto> listarTodos(@PageableDefault(
+    public ResponseEntity<Page<DadosDetalhadosConserto>> listarTodos(@PageableDefault(
             size = 10,
             page = 0,
             sort = {"mecanico.nome"},
             direction = Sort.Direction.DESC
     ) Pageable pageable) {
-        return repostory.findAll(pageable).map(DadosDetalhadosConserto::new);
+        return ResponseEntity.ok(repostory.findAll(pageable).map(DadosDetalhadosConserto::new));
     }
 
     @GetMapping("algunsdados")
-    public List<DadosListagemConserto> listarAlgunsDados() {
-        return repostory.findAll().stream().map(DadosListagemConserto::new).toList();
+    public ResponseEntity<List<DadosListagemConserto>> listarAlgunsDados() {
+        return ResponseEntity.ok(repostory.findAllByAtivoTrue().stream().map(DadosListagemConserto::new).toList());
     }
 
     @GetMapping("/{id}")
