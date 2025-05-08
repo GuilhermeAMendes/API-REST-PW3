@@ -7,9 +7,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("consertos")
@@ -38,5 +40,17 @@ public class ConsertoController {
     @GetMapping("algunsdados")
     public List<DadosListagemConserto> listarAlgunsDados() {
         return repostory.findAll().stream().map(DadosListagemConserto::new).toList();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DadosDetalhadosConserto> getMedicoById(@PathVariable Long id) {
+        Optional<Conserto> consertoOptional = repostory.findById(id);
+        if (consertoOptional.isPresent()) {
+            Conserto conserto = consertoOptional.get();
+            return ResponseEntity.ok(new DadosDetalhadosConserto(conserto));
+        }
+        else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
