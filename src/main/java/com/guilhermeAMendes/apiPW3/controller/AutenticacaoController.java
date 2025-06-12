@@ -2,6 +2,7 @@ package com.guilhermeAMendes.apiPW3.controller;
 
 import com.guilhermeAMendes.apiPW3.usuario.Usuario;
 import com.guilhermeAMendes.apiPW3.usuario.dadosAutenticacao;
+import com.guilhermeAMendes.apiPW3.util.security.DadosTokenJWT;
 import com.guilhermeAMendes.apiPW3.util.security.PW3TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +28,10 @@ public class AutenticacaoController {
     public ResponseEntity efetuarLogin(@RequestBody @Valid dadosAutenticacao dados) {
         var token = new UsernamePasswordAuthenticationToken(dados.login(), dados.senha());
         var authentication = manager.authenticate(token);
+
+        var tokenJWT = tokenService.gerarToken((Usuario) authentication.getPrincipal());
+
         return ResponseEntity
-                .ok(tokenService.gerarToken((Usuario) authentication.getPrincipal()));
+                .ok(new DadosTokenJWT(tokenJWT));
     }
-
-
 }
